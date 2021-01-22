@@ -29,10 +29,9 @@ export default {
       );
       const data = await res.json();
       this.upComingMovies = data.results;
+      this.upComingMovies.sort((a, b) => (a.release_date > b.release_date) ? -1 : 1)
       console.log(this.upComingMovies);
-      this.id = this.upComingMovies.id;
       this.baseImage = "http://image.tmdb.org/t/p/w200";
-      console.log(this.poster);
     },
   },
 };
@@ -53,6 +52,6 @@ li {
 }
 
 img {
-  max-width: 80%;
+  width: 225px;
 }
 </style>
