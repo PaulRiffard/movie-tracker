@@ -2,6 +2,14 @@
   <div>
     <h4>Register</h4>
     <form>
+      <label for="firstname">Prénom</label>
+      <div>
+        <input id="firstname" type="text" v-model="firstname" required />
+      </div>
+      <label for="name">Nom</label>
+      <div>
+        <input id="name" type="name" v-model="name" required />
+      </div>
       <label for="email">E-Mail Address</label>
       <div>
         <input id="email" type="email" v-model="email" required />
@@ -34,6 +42,8 @@ export default {
       email: "",
       password: "",
       password_confirmation: "",
+      name:"",
+      firstname:"",
     };
   },
   methods: {
@@ -52,16 +62,7 @@ export default {
             password: this.password,
           })
           .then((response) => {
-            localStorage.setItem("jwt", response.data.token);
-
-            if (localStorage.getItem("jwt") != null) {
-              this.$emit("loggedIn");
-              if (this.$route.params.nextUrl != null) {
-                this.$router.push(this.$route.params.nextUrl);
-              } else {
-                this.$router.push("/");
-              }
-            }
+            localStorage.setItem("currentUser", response.data.token);
           })
           .catch((error) => {
             console.error(error);

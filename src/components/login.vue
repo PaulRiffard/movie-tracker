@@ -1,6 +1,9 @@
 <template>
   <div>
-    <form @submit.prevent="login">
+    <form @submit.prevent="onSubmit">
+
+<div v-if="!isLogin">
+
       <input
         v-model="email"
         type="email"
@@ -16,66 +19,81 @@
         placeholder="Mot de passe"
         required
       />
-      <button v-if="!isLogin" type="submit">Login</button>
+      <button type="submit">Login</button>
+          <router-link to="/register">Créer un nouveau compte </router-link>
+</div>
     </form>
-    <button v-if="isLogin" v-on:click="logOut()">logout</button>
+    <div v-if="isLogin"  >
+    <div> Bienvenue {{user.firstname}} {{user.name}} </div>
+    <button v-on:click="logOut()">logout</button>
+    </div>
 
-    <button @click="redirectToRegister()">Create a new account</button>
+
   </div>
 </template>
 
 <script>
-import axios from "axios";
+
+import {authenticationService} from "../service/loginService";
+import VueJwtDecode from 'vue-jwt-decode'
+
 
 export default {
   name: "Login",
+  components:{
+  },
   data() {
     return {
       email: "",
       password: "",
       isLogin: false,
+      currentUser: authenticationService.currentUserValue,
+      user:{},
+      decode: {},
+      token:""
     };
   },
   created() {
-    if (localStorage.getItem("jwt") != null) {
+    this.getUser()
+    
+  },
+
+   methods: {
+
+        getUser(){
+if (localStorage.getItem("currentUser") != null) {
       this.isLogin = true;
+      this.token = localStorage.getItem("currentUser")
+      this.token = this.token.slice(0,-1)
+      this.token  = this.token.substring(1)
+      this.user = VueJwtDecode.decode(this.token).user.userToken
     }
-  },
+        },
 
-  methods: {
-    redirectToRegister() {
-      this.$router.push({ path: "/register" });
-    },
+        onSubmit () {
+            authenticationService.login(this.email , this.password)
+                .then(
+                  user => {
+                  this.decode = VueJwtDecode.decode(user.token)
+                  console.log(user.token)
+                 this.user  = this.decode.user.userToken
+                  this.isLogin = true
+                  },
+                    error => {
+                        this.error = error;
+                        this.loading = false;
+                    }
+                );
+        },
 
-    login(e) {
-      e.preventDefault();
-      axios
-        .post("https://movie-tracker-back.herokuapp.com/user/login", {
-          email: this.email,
-          password: this.password,
-        })
-        .then((response) => {
-          console.log(response);
-          localStorage.setItem("jwt", response.data.token);
+    logOut(){
+      authenticationService.logout()
+      this.isLogin = false
+      this.user = {}
+    }
 
-          if (localStorage.getItem("jwt") != null) {
-            this.$emit("loggedIn");
-            this.isLogin = true;
-            if (this.$route.params.nextUrl != null) {
-              this.$router.push(this.$route.params.nextUrl);
-            }
-          }
-        })
-        .catch(function (error) {
-          console.error(error.response);
-        });
-    },
-    logOut() {
-      localStorage.removeItem("jwt");
-      this.isLogin = false;
-    },
-  },
-};
+    }
+}
 </script>
 
 <style lang="css">
