@@ -1,17 +1,45 @@
 <template>
-  <div v-if="director">
+  <div v-if="user" >
+<button v-if="user.seen.indexOf(movie._id)" v-on:click="movieSeen()" > j'ai vus ce film</button>
+<button v-if="!user.seen.indexOf(movie._id)" v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
+
+
 <div class="title" >
       {{movie.title}}
       {{movie.tagline}}
        {{movie.release_date}}
        <img :src="movie.poster_path"/>
+       {{movie.overview}}
 </div>
      
 
   <div class="castRow">    
- <div class="cast" >{{director.name}}  <img :src="director.profile_path"/></div>
 
-            <div class="cast" v-for="(cast, i ) in movieCast.slice(0,5) " :key="cast + i" >{{cast.name}} / {{cast.character}} <img :src="cast.profile_path"/> </div> 
+<div class="cast" v-for="(director, i) in directors" :key="i" >  
+     
+     <RouterLink  :to="{
+         name:'personInformation',
+         params:{
+            id: director.id
+         }
+        }">  
+     {{director.name}}
+      <img :src="director.profile_path"/> {{director.job}} 
+      </RouterLink> 
+     
+     </div> 
+ <div class="cast" v-for="i in 4 " :key="i" >
+       <RouterLink  :to="{
+         name:'personInformation',
+         params:{
+            id: cast[i-1].id,
+         }
+        }">  
+         {{cast[i-1].name}} 
+         <img :src="cast[i-1].profile_path"/> 
+         {{cast[i-1].character}} 
+       </RouterLink>
+</div> 
 
 </div>
      
@@ -20,15 +48,25 @@
 </template>
 
 <script>
+import {sMovie} from "../service/movieService"
+import {authenticationService} from "../service/loginService"
+
 export default {
     data(){
         return {
 id: this.$route.params.id,
+user :{},
 movie :{},
-moviePerson: {},
-director: {},
+crew :[],
+cast:[],
+directors:[],
+moviePersons: {},
 baseImage: "http://image.tmdb.org/t/p/w200",
-i : 0
+arrayMovieSeen:[],
+movieBdd : false,
+
+buttonMovieSeen : false,
+movieIndex : 0
 }
     },
 
@@ -39,36 +77,88 @@ i : 0
        "https://api.themoviedb.org/3/movie/"+this.id+"?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr"
       );
       this.movie = await res.json();
+     
       this.movie.poster_path = this.baseImage + this.movie.poster_path
+      console.log(this.movie)
+      this.movieInDatabade(this.movie.id)
         },
 
-  async getMovieCastById(){
-      const res = await fetch(
-      "https://api.themoviedb.org/3/movie/"+this.id +"/credits?api_key=57d264ad6b69204de8c87c1935fdf93b"
-
-      );
-      this.moviePerson = await res.json();
-      this.movieCast = this.moviePerson.cast
-      this.movieCast.forEach(element => {
-          element.profile_path = this.baseImage + element.profile_path
-          
+   getMovieCastById(){
+       fetch("https://api.themoviedb.org/3/movie/"+this.id +"/credits?api_key=57d264ad6b69204de8c87c1935fdf93b").then(response => response.json())
+      .then(response =>{
+        
+      this.cast = response.cast
+      this.cast.forEach(element => {
+          element.profile_path = this.baseImage + element.profile_path      
       });
-      this.getDirector()
+      this.crew = response.crew
+      this.crew.forEach(element => {
+          if(element.job == "Director"){
+              this.directors.push(element)
+          }
+    element.profile_path = this.baseImage + element.profile_path      
+            }); 
+      })
+        },
+
+
+        unSeenMovie(){
+            this.movieIndex = this.user.seen.indexOf(this.movie._id)
+            this.user.seen.splice(this.movieIndex, 1)
+            authenticationService.editSeen(this.user._id, this.user).then(res => {
+                console.log(res)
+            }).catch(err =>{
+                console.log(err)
+            })
+
         },
     
-    getDirector(){
-        this.moviePerson.crew.forEach(element => {
-            if(element.job == "Director") 
-            this.director = element
-            element.profile_path = this.baseImage + element.profile_path
-        });
+
+    movieSeen(){
+        if(!this.movieBdd){
+        this.movie.director = this.directors;
+        this.movie.cast = this.cast
+        this.movie.mdb = this.movie.id
+       sMovie.movieSeen(this.movie).then(response => {
+            this.movieInDatabade()
+           this.user.seen.push(response._id)
+            authenticationService.editSeen(this.user._id, this.user).then(res => {
+                console.log(res)
+            }).catch(err =>{
+                console.log(err)
+            })
+         
+       })
+        }else{
+            this.user.seen.push(this.movie._id)
+            authenticationService.editSeen(this.user._id, this.user).then(res => {
+                console.log(res)
+            }).catch(err =>{
+                console.log(err)
+            })
+
+        }
+        
+    },
+    movieInDatabade(id){
+        sMovie.getMovieByMdbId(id).then(res =>{
+           if(res.length > 0 ){
+               this.movie = res[0]
+               this.movieBdd = true
+           }
+        })
+            
     }
      
     },
+
     created(){
         this.getMovieById(),
         this.getMovieCastById()
-    }
+        authenticationService.getUser().then(res  =>{
+        this.user= res
+       })
+    },
 }
 </script>
 

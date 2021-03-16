@@ -2,37 +2,37 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Register from '../views/Register.vue'
-import List from '../views/List.vue'
 import MovieInformation from '../views/Movie-information.vue'
 import PersonInformation from '../views/Person-Information.vue'
+import CollectionList from '../views/Lists.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
   },
   {
-    path: '/list',
-    name: 'List',
-    component: List
-  },
-  {
     path: '/register',
-    name: 'Register',
+    name: 'register',
     component: Register
   },
   {
     path: '/movie/:id',
-    name: 'MovieInformation',
+    name: 'movieInformation',
     component: MovieInformation
   },
   {
     path: '/person/:id',
-    name: 'PersonInformation',
+    name: 'personInformation',
     component: PersonInformation
+  },
+  {
+    path: '/lists',
+    name: 'lists',
+    component: CollectionList
   },
 ]
 

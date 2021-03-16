@@ -1,13 +1,16 @@
 <template>
    <div class="containerMovie">
     <div class="wrapMovie"  v-for="movie in upComingMovies" :key="movie.original_title" >
-    <router-link  :to="'movie/'+movie.id" class="upCommingMovie"  >
-      
-      {{ movie.release_date }}
-      {{ movie.title }}
+    <RouterLink  :to="{
+         name:'movieInformation',
+         params:{
+            id: movie.id
+         }
+        }" class="upCommingMovie"  >
       <img :src="baseImage + movie.poster_path" />
-
-      </router-link>
+      <div> {{ movie.title }}</div>
+      <div>{{ movie.release_date }}</div>
+    </RouterLink>
       </div>
       </div>
 </template>
@@ -29,7 +32,11 @@ export default {
   methods: {
     async getName() {
       const res = await fetch(
-"https://api.themoviedb.org/3/movie/now_playing?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr&page=1&region=fr"      );
+/* "https://api.themoviedb.org/3/movie/now_playing?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr&region=fr" */
+
+"https://api.themoviedb.org/3/movie/popular?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr&region=fr"
+ 
+);
       const data = await res.json();
       this.upComingMovies = data.results;
       this.upComingMovies.sort((a, b) => (a.release_date > b.release_date) ? -1 : 1)
