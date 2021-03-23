@@ -7,7 +7,6 @@
 </template>
 
 <script>
-//import HelloWorld from '@/components/HelloWorld.vue'
 import Search from "../components/searchMovie";
 import Upcomingmovies from "../components/upcomingmovies.vue";
 import Login from "../components/login";

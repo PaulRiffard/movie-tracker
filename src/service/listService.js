@@ -1,4 +1,5 @@
-const api = 'http://localhost:5500/list'
+//const api = 'http://localhost:5500/list'
+const api = 'https://movie-tracker-back.herokuapp.com/list'
 import {handleResponse } from './handle-response'
 import { requestOptions } from './request-options';
 
@@ -9,7 +10,6 @@ export const sList = {
 
 
 function addList(list){
-    console.log(list)
     return fetch(`${api}/add`, requestOptions.post({list}))
     .then(handleResponse)
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
- <div v-for="actor in person.cast" :key="actor">
+ <div v-for="actor in person.cast" :key="actor.id">
  <RouterLink  :to="{
          name:'movieInformation',
          params:{
@@ -32,7 +32,7 @@ export default {
    fetch("https://api.themoviedb.org/3/person/"+this.id +"/movie_credits?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr").then(response => response.json())
       .then(response =>{
         this.person = response
-        console.log(this.person)
+        this.person.cast.sort((a, b) => (a.release_date > b.release_date) ? -1 : 1)
       })
 }
 

@@ -40,16 +40,12 @@ export default {
       )
         .then((res) => res.json())
         .then((data) => {
-          /*console.log(data);*/
           this.title = data.original_title;
           this.popularity = data.popularity
         });
     },
 
     searchMovie() {
-
-      console.log(this.inputValue)
-
       fetch(
         "https://api.themoviedb.org/3/search/movie?api_key=57d264ad6b69204de8c87c1935fdf93b&query=" +
           this.inputValue +"&language=fr&region=fr"
@@ -59,7 +55,6 @@ export default {
   
           this.movies = data.results
           this.movies.sort((a, b) => (a.popularity > b.popularity) ? -1 : 1)
-          console.log(this.movies)
           this.idMovie = this.movies[0].id;
           this.getInfoMovie(this.idMovie);
         });

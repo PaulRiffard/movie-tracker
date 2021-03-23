@@ -1,9 +1,9 @@
 <template>
   <div v-if="user" >
-<button v-if="user.seen.indexOf(movie._id)" v-on:click="movieSeen()" > j'ai vus ce film</button>
-<button v-if="!user.seen.indexOf(movie._id)" v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
+<button v-if="!buttonMovieSeen" v-on:click="movieSeen()" > j'ai vus ce film</button>
+<button v-if="buttonMovieSeen" v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
 
-
+ <button v-on:click="resetSeen()" > Reset Seen vue </button>
 <div class="title" >
       {{movie.title}}
       {{movie.tagline}}
@@ -64,6 +64,13 @@ moviePersons: {},
 baseImage: "http://image.tmdb.org/t/p/w200",
 arrayMovieSeen:[],
 movieBdd : false,
+actualDate : new Date,
+
+objectSeen:{
+    movie:"",
+    date:""
+},
+
 
 buttonMovieSeen : false,
 movieIndex : 0
@@ -79,7 +86,6 @@ movieIndex : 0
       this.movie = await res.json();
      
       this.movie.poster_path = this.baseImage + this.movie.poster_path
-      console.log(this.movie)
       this.movieInDatabade(this.movie.id)
         },
 
@@ -105,6 +111,7 @@ movieIndex : 0
         unSeenMovie(){
             this.movieIndex = this.user.seen.indexOf(this.movie._id)
             this.user.seen.splice(this.movieIndex, 1)
+            this.buttonMovieSeen = false
             authenticationService.editSeen(this.user._id, this.user).then(res => {
                 console.log(res)
             }).catch(err =>{
@@ -115,27 +122,32 @@ movieIndex : 0
     
 
     movieSeen(){
+        this.buttonMovieSeen = true
         if(!this.movieBdd){
         this.movie.director = this.directors;
         this.movie.cast = this.cast
         this.movie.mdb = this.movie.id
        sMovie.movieSeen(this.movie).then(response => {
             this.movieInDatabade()
-           this.user.seen.push(response._id)
+            this.objectSeen.movie=response._id
+            this.objectSeen.date = this.actualDate
+           this.user.seen.push(this.objectSeen)
             authenticationService.editSeen(this.user._id, this.user).then(res => {
                 console.log(res)
             }).catch(err =>{
                 console.log(err)
-            })
+            }) 
          
        })
         }else{
-            this.user.seen.push(this.movie._id)
+            this.objectSeen.movie= this.movie._id
+            this.objectSeen.date= this.actualDate
+            this.user.seen.push(this.objectSeen)
             authenticationService.editSeen(this.user._id, this.user).then(res => {
                 console.log(res)
             }).catch(err =>{
                 console.log(err)
-            })
+            }) 
 
         }
         
@@ -146,10 +158,30 @@ movieIndex : 0
                this.movie = res[0]
                this.movieBdd = true
            }
+           this.isUserSeenMovie()
         })
             
+    },
+    
+    isUserSeenMovie(){
+        if(this.movieBdd){
+        this.user.seen.forEach(element => {
+            if(element.movie._id == this.movie._id){
+                this.buttonMovieSeen = true
+            } 
+        });
+        }
+    },
+    resetSeen(){
+     this.user.seen = []
+     authenticationService.editSeen(this.user._id, this.user).then(res => {
+                console.log(res)
+            }).catch(err =>{
+                console.log(err)
+            })
     }
      
+
     },
 
     created(){

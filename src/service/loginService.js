@@ -4,8 +4,8 @@ import {handleResponse } from './handle-response'
 import VueJwtDecode from 'vue-jwt-decode'
 
 
-//const api = 'https://movie-tracker-back.herokuapp.com/user'
-const api = 'http://localhost:5500/user'
+ 
+//const api = 'http://localhost:5500/user'
 let user
 
 
@@ -26,7 +26,6 @@ function login(email, password) {
     return fetch(`${api}/login`, requestOptions.post({ email, password }))
         .then(handleResponse)
         .then(user => {
-            console.log(user)
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify(user.token));
             currentUserSubject.next(user);
@@ -48,7 +47,6 @@ function getUser(){
     .then(handleResponse)
     .then(res =>{
          user = res[0]
-         console.log(user)
         return user
     })
 }

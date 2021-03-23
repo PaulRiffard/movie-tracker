@@ -5,6 +5,7 @@ import Register from '../views/Register.vue'
 import MovieInformation from '../views/Movie-information.vue'
 import PersonInformation from '../views/Person-Information.vue'
 import CollectionList from '../views/Lists.vue'
+import ListMovie from '../views/Listingmovie.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/lists',
     name: 'lists',
     component: CollectionList
+  },
+  {
+    path: '/seen',
+    name: 'seen',
+    component: ListMovie
   },
 ]
 

@@ -1,6 +1,7 @@
 <template>
   <div  id="app">
     <div id="nav">
+      <router-link to="/seen">Movie Seen</router-link>
       <router-link to="/">Home</router-link> 
       <router-link to="/lists">Listes</router-link> 
     </div>
