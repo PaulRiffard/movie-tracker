@@ -28,7 +28,6 @@ export default {
   created(){
      authenticationService.getUser().then(res =>{
          this.user = res
-         console.log(this.user)
          this.calculStatGenre();
      })
      

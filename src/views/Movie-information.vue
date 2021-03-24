@@ -65,20 +65,16 @@ baseImage: "http://image.tmdb.org/t/p/w200",
 arrayMovieSeen:[],
 movieBdd : false,
 actualDate : new Date,
-
 objectSeen:{
     movie:"",
     date:""
 },
-
-
 buttonMovieSeen : false,
 movieIndex : 0
 }
     },
 
     methods:{
-
         async getMovieById(){
       const res = await fetch(
        "https://api.themoviedb.org/3/movie/"+this.id+"?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr"
@@ -106,8 +102,6 @@ movieIndex : 0
             }); 
       })
         },
-
-
         unSeenMovie(){
             this.movieIndex = this.user.seen.indexOf(this.movie._id)
             this.user.seen.splice(this.movieIndex, 1)
@@ -119,78 +113,78 @@ movieIndex : 0
             })
 
         },
-    
-
-    movieSeen(){
-        this.buttonMovieSeen = true
-        if(!this.movieBdd){
-        this.movie.director = this.directors;
-        this.movie.cast = this.cast
-        this.movie.mdb = this.movie.id
-       sMovie.movieSeen(this.movie).then(response => {
-            this.movieInDatabade()
-            this.objectSeen.movie=response._id
-            this.objectSeen.date = this.actualDate
-           this.user.seen.push(this.objectSeen)
-            authenticationService.editSeen(this.user._id, this.user).then(res => {
-                console.log(res)
-            }).catch(err =>{
-                console.log(err)
-            }) 
-         
-       })
-        }else{
-            this.objectSeen.movie= this.movie._id
-            this.objectSeen.date= this.actualDate
+        movieSeen(){
+            this.buttonMovieSeen = true
+            if(!this.movieBdd){
+            this.movie.director = this.directors;
+            this.movie.cast = this.cast
+            this.movie.mdb = this.movie.id
+        sMovie.movieSeen(this.movie).then(response => {
+                this.movieInDatabade()
+                this.objectSeen.movie=response._id
+                this.objectSeen.date = this.actualDate
             this.user.seen.push(this.objectSeen)
-            authenticationService.editSeen(this.user._id, this.user).then(res => {
-                console.log(res)
-            }).catch(err =>{
-                console.log(err)
-            }) 
-
-        }
-        
-    },
-    movieInDatabade(id){
-        sMovie.getMovieByMdbId(id).then(res =>{
-           if(res.length > 0 ){
-               this.movie = res[0]
-               this.movieBdd = true
-           }
-           this.isUserSeenMovie()
-        })
+                authenticationService.editSeen(this.user._id, this.user).then(res => {
+                    console.log(res)
+                }).catch(err =>{
+                    console.log(err)
+                }) 
             
-    },
-    
-    isUserSeenMovie(){
-        if(this.movieBdd){
-        this.user.seen.forEach(element => {
-            if(element.movie._id == this.movie._id){
-                this.buttonMovieSeen = true
-            } 
-        });
-        }
-    },
-    resetSeen(){
-     this.user.seen = []
-     authenticationService.editSeen(this.user._id, this.user).then(res => {
-                console.log(res)
-            }).catch(err =>{
-                console.log(err)
-            })
-    }
+        })
+            }else{
+                this.objectSeen.movie= this.movie._id
+                this.objectSeen.date= this.actualDate
+                this.user.seen.push(this.objectSeen)
+                authenticationService.editSeen(this.user._id, this.user).then(res => {
+                    console.log(res)
+                }).catch(err =>{
+                    console.log(err)
+                }) 
+            }
+        },
+            movieInDatabade(id){
+                sMovie.getMovieByMdbId(id).then(res =>{
+                if(res.length > 0 ){
+                    this.movie = res[0]
+                    this.movieBdd = true
+                }
+                this.isUserSeenMovie()
+                })
+                    
+            },
+            
+            isUserSeenMovie(){
+                if(this.movieBdd){
+                this.user.seen.forEach(element => {
+                    if(element.movie._id == this.movie._id){
+                        this.buttonMovieSeen = true
+                    } 
+                });
+                }
+            },
+            resetSeen(){
+            this.user.seen = []
+            authenticationService.editSeen(this.user._id, this.user).then(res => {
+                        console.log(res)
+                    }).catch(err =>{
+                        console.log(err)
+                    })
+            }
      
 
     },
+
 
     created(){
         this.getMovieById(),
         this.getMovieCastById()
         authenticationService.getUser().then(res  =>{
         this.user= res
+        this.movieInDatabade()
        })
     },
+
+
 }
 </script>
 
