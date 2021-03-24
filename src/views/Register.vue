@@ -63,8 +63,9 @@ export default {
         this.password === this.password_confirmation &&
         this.password.length > 0
       ) {
-        let url = "http://localhost:5500/user/signup";
-
+/*         let url = "http://localhost:5500/user/signup";
+ */
+    const url = 'https://movie-tracker-back.herokuapp.com/user/signup'
         axios
           .post(url, {
             username: this.username,

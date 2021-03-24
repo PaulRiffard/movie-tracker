@@ -14,7 +14,7 @@ Stat vue marche
 
 
  <ChartDoughnut/> 
-<!--  <LineChart /> -->
+<!-- <LineChart /> -->
 
 </div>
 </template>
@@ -22,12 +22,12 @@ Stat vue marche
 <script>
     import {  authenticationService } from "../service/loginService";
     import ChartDoughnut from "./graphs/Doughnut"
-    /* import LineChart from "./graphs/LineChart" */
+/*     import LineChart from "./graphs/LineChart"  */
 export default {
  
      components:{
         ChartDoughnut,
-     /*    LineChart */
+     /*    LineChart  */
     }, 
     data(){
         return{
