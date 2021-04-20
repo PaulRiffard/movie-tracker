@@ -39,6 +39,7 @@ export default {
         labels: this.chartLabel,
         datasets: [
           {
+            borderColor: this.colorChart,
             backgroundColor: this.colorChart,
             data: this.genreDataChart
           }
@@ -84,9 +85,5 @@ export default {
 </script>
 
 <style scoped>
-.graph{
-    width: 35%;
-}
-
 
 </style>

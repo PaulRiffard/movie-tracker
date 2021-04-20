@@ -7,14 +7,17 @@ Stat vue marche
 {{runTimeTotalMin}}
 {{runTimeTotalHours}}
 {{runTimeTotalDay}}
+{{rateAverage.toFixed(2)}}
 
 <div v-for="movie in threeLast" :key="movie.movie_id"  >
     {{movie.movie.title}}
 </div>
 
 
+<div class="flex justify-around ">
  <ChartDoughnut/> 
-<!-- <LineChart /> -->
+<LineChart />
+</div>
 
 </div>
 </template>
@@ -22,12 +25,12 @@ Stat vue marche
 <script>
     import {  authenticationService } from "../service/loginService";
     import ChartDoughnut from "./graphs/Doughnut"
-/*     import LineChart from "./graphs/LineChart"  */
+    import LineChart from "./graphs/LineChart" 
 export default {
  
      components:{
         ChartDoughnut,
-     /*    LineChart  */
+        LineChart 
     }, 
     data(){
         return{
@@ -35,13 +38,14 @@ export default {
             nbMovie:0,
             runTimeTotalMin:0,
             runTimeTotalHours:0,
+            runTimeMinHours:0,
+            runTimeHours:0,
             runTimeTotalDay:0,
             threeLast:[],
-            test :new Date
-
-            
-
-
+            test :new Date,
+            totalRate:0,
+            rateAverage:0,
+        
         }
     },
     created(){
@@ -51,6 +55,8 @@ export default {
              this.calculRunTime()
              this.getThreeLastMovie()
              this.getDateVue()
+             this.calculateRateAverage()
+             this.getThreeMostRated()
         })
            
     },
@@ -59,8 +65,10 @@ export default {
         calculRunTime(){
             this.user.seen.forEach(movie => {
                this.runTimeTotalMin += movie.movie.runtime
-               this.runTimeTotalHours = (this.runTimeTotalMin/60).toFixed(2)
-               this.runTimeTotalDay = (this.runTimeTotalHours/24).toFixed(2)
+               this.runTimeHours = this.runTimeTotalMin/60
+               this.runTimeMinHours = this.runTimeTotalMin%60 
+               this.runTimeTotalHours = this.runTimeHours.toFixed()+","+this.runTimeMinHours
+               this.runTimeTotalDay = (this.runTimeHours/24).toFixed(2)
             });
         },
 
@@ -70,8 +78,23 @@ export default {
 
         getDateVue(){
           this.test =  Date.parse(this.user.seen[0].date)
-        
         },
+        calculateRateAverage(){
+            let rateArray = this.user.seen.filter(x => x.rate != undefined )
+                rateArray.forEach( r =>{
+                    
+                    this.totalRate += r.rate
+                    console.log(this.totalRate)
+                })
+                this.rateAverage = this.totalRate/rateArray.length
+        },
+        getThreeMostRated(){
+            let movieMostratedArray = this.user.seen.filter(x => x.rate != undefined )
+            movieMostratedArray.sort((a, b) => (a.rate > b.rate) ? -1 : 1)
+            console.log(movieMostratedArray,"0000000000")
+
+
+            },
     }
 }
 </script>

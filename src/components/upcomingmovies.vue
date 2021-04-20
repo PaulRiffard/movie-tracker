@@ -9,7 +9,7 @@
         }" class="upCommingMovie"  >
       <img :src="baseImage + movie.poster_path" />
       <div> {{ movie.title }}</div>
-      <div>{{ movie.release_date }}</div>
+      <div class="text-title" >{{ movie.release_date }}</div>
     </RouterLink>
       </div>
       </div>
@@ -32,8 +32,6 @@ export default {
   methods: {
     async getName() {
       const res = await fetch(
-/* "https://api.themoviedb.org/3/movie/now_playing?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr&region=fr" */
-
 "https://api.themoviedb.org/3/movie/popular?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr&region=fr"
  
 );
@@ -69,4 +67,7 @@ export default {
 img {
   width: 225px;
 }
+
+
+
 </style>

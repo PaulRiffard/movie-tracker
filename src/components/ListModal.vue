@@ -1,20 +1,5 @@
 <template>
-<div>
-    <div v-if="lists" >
-    <div class="flex" v-for="list in lists" :key='list.name' >
-        <div v-on:click="supprList(list._id)"  >
-            suppr
-        </div>
-        {{list.name}}
-
-
-    </div>
-    </div>
-
-    <div v-on:click="toggleEdit()"> Show l'edit</div>
-
-<div v-if="showEdit">
-<!-- This example requires Tailwind CSS v2.0+ -->
+  <!-- This example requires Tailwind CSS v2.0+ -->
 <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
   <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
     <!--
@@ -27,7 +12,7 @@
         From: "opacity-100"
         To: "opacity-0"
     -->
-    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+    <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" aria-hidden="true"></div>
 
     <!-- This element is to trick the browser into centering the modal contents. -->
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -74,50 +59,11 @@
     </div>
   </div>
 </div>
-</div>
-
-
-</div>
 </template>
 
 <script>
-
-import {sList} from "../service/listService"
-import {authenticationService} from "../service/loginService"
 export default {
 
-data(){
-return{
-user :{},
-lists:[],
-showEdit: false,
-
-}
-
-},
-created(){
-        this.user = authenticationService.getUser().then(res =>{
-            this.user = res
-             this.getListByUser()
-        })   
-},
-methods:{
-    getListByUser(){
-         sList.getListById(this.user._id).then(lists =>{
-            this.lists = lists
-         })
-    },
-    supprList(id){
-        sList.supprListById(id).then(res =>{
-            console.log(res)
-            this.getListByUser()
-        })
-
-    },
-    toggleEdit(){
-        this.showEdit = !this.showEdit
-    }
-},
 }
 </script>
 

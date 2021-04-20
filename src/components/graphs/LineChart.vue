@@ -14,21 +14,10 @@ export default {
   },
   data() {
     return {
-      btn: [
-        { label: "Today", value: "day" },
-        { label: "This Week", value: "week" }
-      ],
       chartData: null,
-      data: {
-        day: [1, 3, 5, 3, 1],
-        week: [12, 14, 16, 18, 11, 13, 15]
-      },
-      labels: {
-        day: [8, 10, 12, 14, 16],
-        week: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-      },
-      radio: "day"
+      arrayMonth:[0,0,0,0,0,0,0,0,0,0,0,0]
     };
+
   },
   mounted() {
     this.fillData();
@@ -36,23 +25,44 @@ export default {
   created(){
          authenticationService.getUser().then(res =>{
          this.user = res
-         console.log(this.user)
+      
+         this.calculateMonthMovie()
      })
      
   },
   methods: {
     fillData() {
       this.chartData = {
-        labels: this.labels[this.radio],
+        labels: ["Janvier","Février","Mars","Avri","Mai","Juin","Juillet","Aout","Septembre","Octobre","Novembre","Decembre"],
         datasets: [
           {
-            borderColor: "#81894e",
-            data: this.data[this.radio],
-            label: "Foo"
+            backgroundColor: "#931621",
+            data: this.arrayMonth,
+            label: "Film Vus par mois"
           }
         ]
       };
     },
+
+    calculateMonthMovie(){
+      this.user.seen.map(x =>{
+          x.date = new Date(x.date)
+      })
+
+      this.user.seen.forEach(movie => {
+
+        this.arrayMonth[movie.date.getMonth()] ++
+        
+      });
+
+      console.log(this.arrayMonth)
+    this.updateChart()
+
+
+    
+},
+
+
     updateChart() {
       this.$nextTick(() => {
         this.fillData();
