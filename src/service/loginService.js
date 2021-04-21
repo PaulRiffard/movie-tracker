@@ -4,8 +4,8 @@ import {handleResponse } from './handle-response'
 import VueJwtDecode from 'vue-jwt-decode'
 
 
-//const api = 'https://movie-tracker-back.herokuapp.com/user'
-const api = 'http://localhost:5500/user'
+const api = 'https://movie-tracker-back.herokuapp.com/user'
+//const api = 'http://localhost:5500/user'
 let user
 
 
