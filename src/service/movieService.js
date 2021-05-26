@@ -10,7 +10,6 @@ export const sMovie = {
 
 
 function movieSeen(movie){
-    console.log(movie)
     return fetch(`${api}/add`, requestOptions.post({movie}))
     .then(handleResponse)
 }

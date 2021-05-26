@@ -1,21 +1,47 @@
 <template>
   <div class="bg-black"   id="app">
-    <div class="flex justify-between " id="nav">
+    <router-view />
+    <div class="bg-red  w-screen fixed bottom-0 flex justify-around h-16 items-center"  v-if="mobile" >
       <div>
-         <router-link to="/">
-       <img src="./assets/styles/logo.svg">
-       </router-link>
+         <RouterLink  :to="{
+         name:'home',
+        }">  
+         <img class="w-8" src="./assets/icons/home.svg"/> 
+         </RouterLink>
       </div>
-    <div class="flex align-center " >
-      <router-link to="/seen">Movie Seen</router-link>
-      <router-link to="/">Home</router-link> 
-      <router-link to="/lists">Listes</router-link> 
+      <div>
+      <RouterLink  :to="{
+         name:'search',
+        }">  
+         <img class="w-8" src="./assets/icons/loupe-white.svg"/> 
+         </RouterLink>
+      </div>
+      <div>
+      <RouterLink  :to="{
+         name:'seen',
+        }"> 
+       
+         <img class="w-8" src="./assets/icons/oeil.svg"/> 
+         </RouterLink>
+      </div>
     </div>
-    </div>
-    <router-view/>
   </div>
 </template>
-
+<script>
+export default {
+  data(){
+    return{
+      mobile:false
+    }
+  },
+  created(){
+    if(window.screen.width <= 600){
+      this.mobile = true
+    }
+  }
+  
+}
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600&display=swap');
 
@@ -40,6 +66,7 @@
 #nav a.router-link-exact-active {
   color: #735CDD;
 }
+
 
 
 </style>

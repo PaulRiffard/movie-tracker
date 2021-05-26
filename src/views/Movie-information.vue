@@ -1,25 +1,56 @@
 <template>
-  <div v-if="movie">
-  
-<button v-if="!buttonMovieSeen" v-on:click="movieSeen()" > j'ai vus ce film</button>
-<button v-else v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
-<button v-on:click="showModal()"  > Ajouter ce film a une liste  </button>
-<Modal v-if="toggleModal" />
+<div>
+     <button v-if="mobile && !buttonMovieSeen " v-on:click="movieSeen()" class="bg-red rounded-full w-20 h-20 fixed bottom-20 right-4 flex justify-center items-center" >       
+        <img  class="w-16" src="../assets/icons/oeil.svg"/>
+     </button>
+         <button v-if="mobile && buttonMovieSeen " v-on:click="unMovieSeen()" class="bg-red rounded-full w-20 h-20 fixed bottom-20 right-4 flex justify-center items-center" >       
+             X
+     </button>
+    <div class="flex justify-center items-center h-96"  v-if="loading">
+        <img  class="loading"   src="../assets/loading/loading.gif"/>
+        
+    </div>
 
- <button v-on:click="resetSeen()" > Reset Seen vue </button>
+  <div v-if="!loading">
+  <div v-if="user" >
+<Modal 
+:filmId="movie._id" v-if="toggleModal" 
+v-on:cancelModal="cancelModal()"
+/>
+<!--  <button v-on:click="resetSeen()" > Reset Seen vue </button> -->
+   </div>
 <div class="title" >
-        {{user.seen[movieIndex].rate}}
-      {{movie.title}}
-      {{movie.tagline}}
-       {{movie.release_date}}
-       <img :src="movie.poster_path"/>
-       <div v-if="buttonMovieSeen"  class="flex flex-wrap" >
+    <div class="  m-8 w-screen flex justify-evenly" >
+     <img :src="movie.poster_path"/>
+     <div class="text-title" >
+      <div class="font-bold text-xl " >{{movie.title}}</div>
+     <div> {{movie.tagline}}</div>
+      <div> {{movie.release_date  | moment  }}</div>
+
+      <div class="text-white" >
+         
+      <div >{{movie.overview}}</div>
+      </div>
+    </div>
+    </div>   
+      
+
+
+       <div class="flex justify-evenly w-screen "   >
+           <div v-if="buttonMovieSeen"  class="flex flex-wrap" >
         <div   v-for="s in 5" :key="s" >
+        
         <svg v-on:click="rateMovie(s)" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" :fill="s <= user.seen[movieIndex].rate ? 'white': 'black' " stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"
  class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
          </div>
+          <div  >
+                     <button class="btn"  v-if="!buttonMovieSeen" v-on:click="movieSeen()" > j'ai vus ce film</button>
+<button  class="btn"  v-else v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
+<button class="btn" v-on:click="showModal()"  > Ajouter ce film a une liste  </button>
+        </div>
 </div>
-       {{movie.overview}}
+ 
 
  </div>
      
@@ -53,8 +84,13 @@
 </div> 
 
 </div>
-     
-  </div>
+    
+</div>
+   
+
+
+
+</div>
 
 </template>
 
@@ -62,7 +98,13 @@
 import {sMovie} from "../service/movieService"
 import {authenticationService} from "../service/loginService"
 import Modal from "../components/ListModal"
+import moment from "moment"
 export default {
+    filters: {
+  moment: function (date) {
+    return moment(date).locale('fr').format('DD MMMM YYYY');
+  }
+    },
 
     components:{
         Modal
@@ -72,7 +114,8 @@ export default {
     data(){
         return {
 id: this.$route.params.id,
-user :{},
+user :null,
+mobile: false,
 movie :{},
 crew :[],
 cast:[],
@@ -89,19 +132,39 @@ objectSeen:{
 buttonMovieSeen : false,
 movieIndex : 0,
 note: 0,
-toggleModal:false
+toggleModal:false,
+loading: true,
 }
     },
+    created(){
+         if(window.screen.width <= 600){
+      this.mobile = true
+    }
+        
+        authenticationService.getUser().then(res  =>{
+        this.user= res
+        }).catch(err =>{
+            console.log(err)
+        })
+        this.getMovieById(),
+        this.getMovieCastById()
+               
+    },
+
     methods:{
-        async getMovieById(){
+    async getMovieById(){
       const res = await fetch(
        "https://api.themoviedb.org/3/movie/"+this.id+"?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr"
       );
       this.movie = await res.json();
-     
-      this.movie.poster_path = this.baseImage + this.movie.poster_path
-      this.movieInDatabade(this.movie.id)
-        },
+     if(this.movie.poster_path == null ){
+         this.movie.poster_path = "https://i.ibb.co/whjm12r/Group-35.png"
+     }else{
+        this.movie.poster_path = this.baseImage + this.movie.poster_path
+     }
+    
+       this.movieInDatabade(this.movie.id)
+         },
 
    getMovieCastById(){
        fetch("https://api.themoviedb.org/3/movie/"+this.id +"/credits?api_key=57d264ad6b69204de8c87c1935fdf93b").then(response => response.json())
@@ -109,14 +172,24 @@ toggleModal:false
         
       this.cast = response.cast
       this.cast.forEach(element => {
+          if(element.profile_path == null){
+            element.profile_path  = "https://i.ibb.co/whjm12r/Group-35.png"
+          }else{
           element.profile_path = this.baseImage + element.profile_path      
+          }
       });
       this.crew = response.crew
       this.crew.forEach(element => {
           if(element.job == "Director"){
               this.directors.push(element)
           }
+          if(element.profile_path == null){
+                          element.profile_path  = "https://i.ibb.co/whjm12r/Group-35.png"
+
+          }else{
     element.profile_path = this.baseImage + element.profile_path      
+
+          }
             }); 
       })
         },
@@ -137,12 +210,13 @@ toggleModal:false
             this.movie.director = this.directors;
             this.movie.cast = this.cast
             this.movie.mdb = this.movie.id
-        sMovie.movieSeen(this.movie).then(response => {
+            sMovie.movieSeen(this.movie).then(response => {
                 this.movieInDatabade()
+                this.isUserSeenMovie()
                 this.objectSeen.movie=response._id
                 this.objectSeen.date = this.actualDate
-            this.user.seen.push(this.objectSeen)
-            this.movieIndex = this.user.seen.length-1
+                this.user.seen.push(this.objectSeen)
+                this.movieIndex = this.user.seen.length-1
                 authenticationService.editSeen(this.user._id, this.user).then(res => {
                     console.log(res)
                 }).catch(err =>{
@@ -168,22 +242,23 @@ toggleModal:false
                     this.movieBdd = true
                     console.log(this.movie)
                 }
-                this.isUserSeenMovie()
+                    this.isUserSeenMovie()               
                 })
                     
             },
             
             isUserSeenMovie(){
-                if(this.movieBdd){
-                    while(  this.movieIndex < this.user.seen.length){
-                    if(this.user.seen[this.movieIndex].movie._id == this.movie._id){
-                        this.buttonMovieSeen = true
-                        break
-                    } 
-                    this.movieIndex ++
+                setTimeout(() => {
+                    if(this.movieBdd){
+               this.movieIndex = this.user.seen.findIndex( movie => ( movie.movie._id == this.movie._id))
+               console.log(this.movieIndex)
+                if(this.movieIndex != -1){
+                    this.buttonMovieSeen = true
                 }
-                }
-            },
+                }  
+                 this.loading = false
+                }, 300);
+             },
 
             
             resetSeen(){
@@ -198,29 +273,25 @@ toggleModal:false
                 this.user.seen[this.movieIndex].rate = rate
                 authenticationService.editSeen(this.user._id, this.user).then(res => {
                     console.log(res)
+                     authenticationService.getUser().then(res  =>{
+                          this.user= res
+                            })
                 }).catch(err =>{
                     console.log(err)
                 }) 
             },
 
             showModal(){
-                this.toggleModal = !this.toggleModal
+                this. movieInDatabade(this.id)
+                    this.toggleModal = !this.toggleModal
+                
+            },
+            cancelModal(){
+                this.toggleModal = false
             }
      
 
     },
-
-
-    created(){
-        this.getMovieById(),
-        this.getMovieCastById()
-        authenticationService.getUser().then(res  =>{
-        this.user= res
-        console.log(this.user)
-        this.movieInDatabade()
-       })
-    },
-
 
 }
 </script>
@@ -230,10 +301,6 @@ toggleModal:false
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.title img{
-    max-width: 20%;
 }
 
 .castRow{
@@ -252,5 +319,14 @@ toggleModal:false
 
 .cast img{
     width: 10em;
+}
+
+.loading{
+    width:15%
+}
+
+button{
+  background-color: #931621;
+  margin: 5px;
 }
 </style>

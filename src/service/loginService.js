@@ -52,9 +52,6 @@ function getUser(){
 }
 
     function editSeen(id, user ){
-
-        console.log(user, id)
-
     return fetch(`${api+'/'+id}`, requestOptions.put(user))
         .then(handleResponse)
         .then(res =>{

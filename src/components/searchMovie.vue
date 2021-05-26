@@ -1,37 +1,40 @@
 <template>
-  <div class="search-wrapper">
-    <input type="text"  v-model="inputValue" v-on:keyup="searchMovie()" />
-
-<!-- 
-
-    <h3>{{ idMovie }}</h3>
-    <h2>{{ title }}</h2>
-    <h2>{{popularity}}</h2>
- -->
-    <div v-for="movie in movies" :key='movie._id' >
-       
-     <RouterLink  :to="{
+  <div>
+    <input type="text" placeholder="Entrer le nom d'un film ..." class="border-b" v-model="inputValue" v-on:keyup="searchMovie()" />
+    <div class="flex flex-wrap justify-around">
+     <RouterLink  class="flex flex-col items-center m-2 max-w-sm " v-for="movie in movies" :key='movie._id'  :to="{
          name:'movieInformation',
          params:{
             id: movie.id
          }
-        }">  
+        }"   >
+        <div>
       {{movie.title}} 
-       <img :src="baseImage + movie.poster_path" />
+        </div>
+       <img class="w-64 h-96 " :src="movie.poster_path" />
+       <div>
        {{movie.vote_average}}
+       </div>
      </RouterLink>
     </div>
   </div>
 </template>
 <script>
 
+import moment from 'moment'
 
 export default {
+
+ filters: {
+  moment: function (date) {
+    return moment(date).locale('fr').format('DD MMMM YYYY');
+  }
+    },
+
   data() {
     return {
       data: null,
       inputValue: "",
-      idMovie: "",
       title: "",
       popularity:"",
       movies: [],
@@ -44,20 +47,10 @@ export default {
   },
 
   methods: {
-    getInfoMovie(id) {
-      fetch(
-        "https://api.themoviedb.org/3/movie/" +
-          id +
-          "?api_key=57d264ad6b69204de8c87c1935fdf93b"
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          this.title = data.original_title;
-          this.popularity = data.popularity
-        });
-    },
-
     searchMovie() {
+
+      if(this.inputValue != ''){
+
       
       fetch(
         "https://api.themoviedb.org/3/search/movie?api_key=57d264ad6b69204de8c87c1935fdf93b&query=" +
@@ -66,23 +59,29 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           this.movies = []
-  
           data.results.map(item =>{
             if (this.movies.length < 20) this.movies.push(item)
-           
            }) 
            this.movies.sort((a, b) => (a.vote_average > b.vote_average) ? -1 : 1)
-          console.log(this.movies)
-          this.idMovie = this.movies[0].id;
-          this.getInfoMovie(this.idMovie);
+           this.movies.map(movie =>{ if(movie.poster_path == null){
+        movie.poster_path = "https://i.ibb.co/whjm12r/Group-35.png"
+      }else{
+        movie.poster_path = this.baseImage + movie.poster_path
+      }
+      console.log(this.movies)
+      })
+          this.$emit('activeUpcoming', false)
         });
+      }else{
+         this.movies = []
+         this.$emit('activeUpcoming', true)
+       
+      }
     },
   },
 };
 </script>
 
 <style >
-
-
 
 </style>

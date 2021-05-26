@@ -6,17 +6,32 @@
          params:{
             id: movie.id
          }
-        }" class="upCommingMovie"  >
-      <img :src="baseImage + movie.poster_path" />
+        }" class="upCommingMovie max-w-xs"   >
+      <img class="w-64 h-84 "    :src="movie.poster_path" />
       <div> {{ movie.title }}</div>
-      <div class="text-title" >{{ movie.release_date }}</div>
+      <div class="text-title flex flex-wrap  w-full " >
+        <div class="w-8" >
+        <img src="../assets/icons/clap.svg"  />
+        </div>
+        <div class="ml-5" >
+      {{ movie.release_date | moment }}
+        </div>
+      </div>
     </RouterLink>
       </div>
       </div>
 </template>
 
 <script>
+
+import moment from 'moment'
+
 export default {
+   filters: {
+  moment: function (date) {
+    return moment(date).locale('fr').format('DD MMMM YYYY');
+  }
+    },
   name: "upcomingmovies",
   data() {
     return {
@@ -37,8 +52,16 @@ export default {
 );
       const data = await res.json();
       this.upComingMovies = data.results;
-      this.upComingMovies.sort((a, b) => (a.release_date > b.release_date) ? -1 : 1)
-      console.log(this.upComingMovies);
+      this.upComingMovies.sort((a, b) => (a.popularity < b.popularity) ? -1 : 1)
+       this.upComingMovies = this.upComingMovies.splice(14 )
+      this.upComingMovies.sort((a,b) => (a.release_date > b.release_date) ?-1 :1  )
+      this.upComingMovies.map(movie =>{ if(movie.poster_path == null){
+        movie.poster_path = "https://i.ibb.co/whjm12r/Group-35.png"
+      }else{
+        movie.poster_path = this.baseImage + movie.poster_path
+      }
+      
+      })
     },
   },
 };

@@ -7,6 +7,7 @@ export const sList = {
     addList,
     getListById,
     supprListById,
+    editListById,
 };
 
 
@@ -22,5 +23,10 @@ function getListById(id){
 
 function supprListById(id){
     return fetch(`${api}/`+id, requestOptions.delete({id}))
+    .then(handleResponse)
+}
+
+function editListById(id, list){
+    return fetch(`${api}/`+id, requestOptions.put({list}))
     .then(handleResponse)
 }

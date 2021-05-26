@@ -50,12 +50,8 @@ export default {
       })
 
       this.user.seen.forEach(movie => {
-
         this.arrayMonth[movie.date.getMonth()] ++
-        
       });
-
-      console.log(this.arrayMonth)
     this.updateChart()
 
 

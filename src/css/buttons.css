@@ -1,0 +1,7 @@
+
+.btn{
+    @apply bg-red;
+    padding: 5px;
+    border: solid 1px white;
+    margin: 10px;
+}

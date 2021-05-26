@@ -6,6 +6,7 @@ import MovieInformation from '../views/Movie-information.vue'
 import PersonInformation from '../views/Person-Information.vue'
 import CollectionList from '../views/Lists.vue'
 import ListMovie from '../views/Listingmovie.vue'
+import Search from '../components/searchMovie.vue'
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/seen',
     name: 'seen',
     component: ListMovie
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
   },
 ]
 

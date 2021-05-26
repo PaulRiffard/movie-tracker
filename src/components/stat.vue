@@ -1,37 +1,53 @@
 <template>
-<div>
+<div class="containerStat flex m-6  "  >
+     <div class="flex flex-col " >
+     <div class=" p-2 flex bg-title m-3 items-center justify-evenly  " >
+         <img class="p-2 bg-white bg-opacity-25 rounded" src="../assets/icons/popcorn.svg">
+         <div class="flex flex-col items-start" >
+        <div class="font-bold"> {{movieThisMonth.length}}</div>
+         <div> film vus en {{actualDate | moment }} </div>
+         </div>
+     </div>
+     <div class="runTimeTotal flex m-3 p-2 items-center justify-evenly " >
+           <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/hour.svg">
+           <div class="flex flex-col items-start">
+           <div class="font-bold">
+         {{runTimeTotalHours}}
+           </div>
+           <div>
+         Heures passés au cinéma 
+           </div>
+           </div>
+ </div> 
+ </div>   
 
-Stat vue marche
-
-{{nbMovie}}
-{{runTimeTotalMin}}
-{{runTimeTotalHours}}
-{{runTimeTotalDay}}
-{{rateAverage.toFixed(2)}}
-
-<div v-for="movie in threeLast" :key="movie.movie_id"  >
+<div class="m-3 bg-purple flex flex-wrap "  >
+ 3 dernier films
+<div class="m-2 flex justify-center flex-col" v-for="movie in threeLast" :key="movie.movie_id"  >
+       <RouterLink  :to="{
+         name:'movieInformation',
+         params:{
+            id: movie.movie.mdb
+         }
+       }"
+         >
     {{movie.movie.title}}
+       </RouterLink>
 </div>
-
-
-<div class="flex justify-around ">
- <ChartDoughnut/> 
-<LineChart />
-</div>
-
+ </div>
 </div>
 </template>
 
 <script>
     import {  authenticationService } from "../service/loginService";
-    import ChartDoughnut from "./graphs/Doughnut"
-    import LineChart from "./graphs/LineChart" 
+    import moment from "moment"
 export default {
- 
-     components:{
-        ChartDoughnut,
-        LineChart 
-    }, 
+
+        filters: {
+  moment: function (date) {
+    return moment(date).locale('fr').format('MMMM');
+  }
+    },
     data(){
         return{
             user:{},
@@ -45,6 +61,9 @@ export default {
             test :new Date,
             totalRate:0,
             rateAverage:0,
+            movieThisMonth:[],
+            actualDate : new Date,
+            actualMonth:"",
         
         }
     },
@@ -52,11 +71,15 @@ export default {
         authenticationService.getUser().then(res =>{
             this.user = res
              this.nbMovie = this.user.seen.length
+             this.actualMonth = this.actualDate.getMonth()
+              console.log(this.actualMonth)
              this.calculRunTime()
              this.getThreeLastMovie()
              this.getDateVue()
              this.calculateRateAverage()
              this.getThreeMostRated()
+             this.getMovieByMonth()
+
         })
            
     },
@@ -74,6 +97,7 @@ export default {
 
         getThreeLastMovie(){
            this.threeLast = this.user.seen.slice(this.user.seen.length-3)
+           console.log(this.threeLast)
         },
 
         getDateVue(){
@@ -82,23 +106,40 @@ export default {
         calculateRateAverage(){
             let rateArray = this.user.seen.filter(x => x.rate != undefined )
                 rateArray.forEach( r =>{
-                    
                     this.totalRate += r.rate
-                    console.log(this.totalRate)
                 })
                 this.rateAverage = this.totalRate/rateArray.length
         },
         getThreeMostRated(){
             let movieMostratedArray = this.user.seen.filter(x => x.rate != undefined )
             movieMostratedArray.sort((a, b) => (a.rate > b.rate) ? -1 : 1)
-            console.log(movieMostratedArray,"0000000000")
-
-
             },
+        getMovieByMonth(){
+             this.user.seen.map(x =>{
+          x.date = new Date(x.date)
+      })
+      console.log(this.actualMonth)
+    this.movieThisMonth = this.user.seen.filter(x => x.date.getMonth() == this.actualMonth  )
+    console.log(this.movieThisMonth)
+
+    
+        }    
     }
 }
 </script>
 
 <style>
+
+.nbFilm{
+    background-color: #FF3A3A;
+}
+
+.runTimeTotal{
+    background-color: #FF8686;
+}
+
+.containerStat{
+    background-color: #494A4B;
+}
 
 </style>

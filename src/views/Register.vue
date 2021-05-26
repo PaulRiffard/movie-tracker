@@ -73,7 +73,7 @@ export default {
             password: this.password,
           })
           .then((response) => {
-            console.log("ceci est la reponse de ouf" , response)
+            console.log(response)
             this.$router.push({name:'home'})
           })
           .catch((error) => {

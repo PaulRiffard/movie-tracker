@@ -24,7 +24,6 @@
 </div>
     </form>
     <div v-if="isLogin"  >
-    <div> Bienvenue {{user.username}}</div>
     <button v-on:click="logOut()">logout</button>
     </div>
 
@@ -64,11 +63,8 @@ export default {
 if (localStorage.getItem("currentUser") != null) {
       this.isLogin = true;
   authenticationService.getUser().then(res =>{
- console.log('USER DE OUF', res )
  this.user = res
    })
- 
-   
     }
         },
 
@@ -79,6 +75,7 @@ if (localStorage.getItem("currentUser") != null) {
                   this.decode = VueJwtDecode.decode(user.token)
                  this.user  = this.decode.user
                   this.isLogin = true
+                  this.$emit('logIn',this.user)
                   },
                     error => {
                         this.error = error;
@@ -91,6 +88,7 @@ if (localStorage.getItem("currentUser") != null) {
       authenticationService.logout()
       this.isLogin = false
       this.user = {}
+      this.$emit('logOut')
     }
 
     }
