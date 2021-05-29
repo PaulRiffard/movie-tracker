@@ -40,14 +40,22 @@ function logout() {
 }
 
 function getUser(){
-
+    return new Promise((resolve, reject)=>{
     let token = localStorage.getItem("currentUser")
+    if(token){
     let id = VueJwtDecode.decode(token.slice(0,-1).substring(1)).user.id
     return fetch(`${api+'/'+id}`, requestOptions.get())
     .then(handleResponse)
     .then(res =>{
          user = res[0]
-        return user
+         resolve(user)
+    }).catch(err=>{
+        reject(err)
+    })
+}else{
+    resolve(null)
+    
+}
     })
 }
 

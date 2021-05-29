@@ -1,23 +1,5 @@
 <template>
   <div class="home">
-     <div class="flex mb-6" id="nav">
-      <div class="w-1/3 border-b border-r border-white pl-8" >
-         <router-link to="/">
-       <img src="../assets/styles/logo.svg">
-       </router-link>
-      </div>
-      <div class=" w-1/3 border-b p-4 flex" >
-        <input class="h-full" placeholder="Entrez le nom d'un film">
-        <img class="w-8" src="../assets/icons/loupe.svg"> 
-      </div> 
-      <div class="border-l border-b w-1/3 " >
-     <RouterLink  :to="{
-         name:'seen',
-        }">  
-        Film Vue
-     </RouterLink>
-      </div>
-    </div>
     <div class="flex items-center " v-if="user" >
     <div class="flex flex-col items-center" >
       <div class="text-title font-bold" >
@@ -28,7 +10,7 @@
 voici les dernières données 
 cinématographiques.
 
-<button v-on:click="toggleGraph" class=" mt-4 text-purple border-purple border w-60 h-10"  >
+<button v-on:click="toggleGraph" class=" mt-4 secondary_btn"  >
   Voir mon récapitulatif
   </button>
   <LineChart v-if="showGraph" />
@@ -66,10 +48,14 @@ export default {
     return{
       toggleUp : true,
       user: null,
-      showGraph:false
+      showGraph:false,
+      mobile:false,
     }
   },
   created(){
+      if(window.screen.width <= 600){
+      this.mobile = true
+    }
     authenticationService.getUser().then(res => {
       this.user = res
     })

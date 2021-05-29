@@ -19,12 +19,12 @@
         placeholder="Mot de passe"
         required
       />
-      <button type="submit">Login</button>
+      <button  class="secondary_btn" type="submit">Login</button>
           <router-link to="/register">Créer un nouveau compte </router-link>
 </div>
     </form>
     <div v-if="isLogin"  >
-    <button v-on:click="logOut()">logout</button>
+    <button class="secondary_btn" v-on:click="logOut()">logout</button>
     </div>
 
 

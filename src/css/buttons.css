@@ -5,3 +5,12 @@
     border: solid 1px white;
     margin: 10px;
 }
+
+.secondary_btn{
+
+    @apply text-purple;
+    @apply border-purple;
+    @apply border;
+    @apply w-60;
+    @apply h-10;
+}

@@ -1,6 +1,24 @@
 <template>
   <div class="bg-black"   id="app">
-    <router-view />
+       <div v-if="!mobile" class="flex mb-6" id="nav">
+      <div class="w-1/3 border-b border-r border-white pl-8" >
+         <router-link to="/">
+       <img src="./assets/styles/logo.svg">
+       </router-link>
+      </div>
+      <div class=" w-1/3 border-b p-4 flex" >
+        <input class="h-full" placeholder="Entrez le nom d'un film">
+        <img class="w-8" src="./assets/icons/loupe.svg"> 
+      </div> 
+      <div class="border-l border-b w-1/3 flex justify-center items-center  " >
+     <RouterLink :to="{
+         name:'seen',
+        }">  
+        Film Vue
+     </RouterLink>
+      </div>
+    </div>
+    <router-view v-  />
     <div class="bg-red  w-screen fixed bottom-0 flex justify-around h-16 items-center"  v-if="mobile" >
       <div>
          <RouterLink  :to="{
@@ -31,7 +49,8 @@
 export default {
   data(){
     return{
-      mobile:false
+      mobile:false,
+      querySearch:""
     }
   },
   created(){

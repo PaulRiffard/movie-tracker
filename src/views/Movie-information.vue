@@ -44,10 +44,9 @@ v-on:cancelModal="cancelModal()"
  class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
         </div>
          </div>
-          <div  >
+          <div v-if="user" >
                      <button class="btn"  v-if="!buttonMovieSeen" v-on:click="movieSeen()" > j'ai vus ce film</button>
 <button  class="btn"  v-else v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
-<button class="btn" v-on:click="showModal()"  > Ajouter ce film a une liste  </button>
         </div>
 </div>
  
@@ -141,11 +140,10 @@ loading: true,
       this.mobile = true
     }
         
-        authenticationService.getUser().then(res  =>{
-        this.user= res
-        }).catch(err =>{
-            console.log(err)
-        })
+      authenticationService.getUser().then(res =>{
+          this.user=res
+      }
+      )
         this.getMovieById(),
         this.getMovieCastById()
                
@@ -242,7 +240,11 @@ loading: true,
                     this.movieBdd = true
                     console.log(this.movie)
                 }
-                    this.isUserSeenMovie()               
+                if(this.user){                
+                    this.isUserSeenMovie() 
+                }else{
+                    this.loading= false
+                }              
                 })
                     
             },
