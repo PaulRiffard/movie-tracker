@@ -11,6 +11,9 @@ export default {
         scales: {
           yAxes: [
             {
+              gridLines:{
+                display:false
+              },
               ticks: {
                 beginAtZero: true
               }

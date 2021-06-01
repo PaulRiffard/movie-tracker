@@ -21,6 +21,7 @@
       />
       <button  class="secondary_btn" type="submit">Login</button>
           <router-link to="/register">Créer un nouveau compte </router-link>
+          <div v-if="error"> Mot de passe Incorrect</div>
 </div>
     </form>
     <div v-if="isLogin"  >
@@ -49,7 +50,8 @@ export default {
       currentUser: authenticationService.currentUserValue,
       user:{},
       decode: {},
-      token:""
+      token:"",
+      error:null
     };
   },
   created() {
@@ -72,6 +74,7 @@ if (localStorage.getItem("currentUser") != null) {
             authenticationService.login(this.email , this.password)
                 .then(
                   user => {
+                    console.log("TEST DE OUF ")
                   this.decode = VueJwtDecode.decode(user.token)
                  this.user  = this.decode.user
                   this.isLogin = true
@@ -79,6 +82,7 @@ if (localStorage.getItem("currentUser") != null) {
                   },
                     error => {
                         this.error = error;
+                        console.log(this.error)
                         this.loading = false;
                     }
                 );

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <div class="flex items-center " v-if="user" >
-    <div class="flex flex-col items-center" >
+    <div class="flex items-center flex-wrap  m-4" v-if="user" >
+    <div class="flex flex-col items-center w-2/6 " >
       <div class="text-title font-bold" >
       BONJOUR {{user.username.toUpperCase()}},
       </div>
@@ -13,12 +13,16 @@ cinématographiques.
 <button v-on:click="toggleGraph" class=" mt-4 secondary_btn"  >
   Voir mon récapitulatif
   </button>
-  <LineChart v-if="showGraph" />
-  <Doughnut v-if="showGraph" />
+ 
       </div>
     </div>
+    
     <Stat/>
     </div>
+     <div class="flex flex-wrap justify-around m-5 ">
+  <LineChart v-if="showGraph" />
+  <Doughnut v-if="showGraph" />
+  </div>
     <Login v-on:logOut="logOut()" v-on:logIn="logIn($event)" />
     <Search v-on:activeUpcoming="activeUpcoming($event)" />
     <Upcomingmovies v-if="toggleUp" />

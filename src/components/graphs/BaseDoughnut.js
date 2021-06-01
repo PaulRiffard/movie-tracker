@@ -11,6 +11,7 @@ export default {
         scales: {
           yAxes: [
             {
+              display:false,
               ticks: {
                 beginAtZero: true
               }

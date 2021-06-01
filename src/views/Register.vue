@@ -25,6 +25,8 @@
         />
       </div>
       <button v-if="username && password && password_confirmation && email" type="submit" @click="handleSubmit">Register</button>
+
+      <div v-if="error" > Adresse Mail deja utilisé </div>  
     </form>
   </div>
 </template>
@@ -40,7 +42,8 @@ export default {
       email: "",
       password: "",
       password_confirmation: "",
-      decode:{}
+      decode:{},
+      error:null
     };
   },
   created(){
@@ -77,13 +80,14 @@ export default {
             this.$router.push({name:'home'})
           })
           .catch((error) => {
-            console.error(error);
+            this.error = error
+            console.log(this.error);
           });
       } else {
         this.password = "";
         this.passwordConfirm = "";
 
-        return alert("Passwords do not match");
+        return alert("Les mots de passe ne correspondent pas ");
       }
     },
   },

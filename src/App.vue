@@ -7,7 +7,7 @@
        </router-link>
       </div>
       <div class=" w-1/3 border-b p-4 flex" >
-        <input class="h-full" placeholder="Entrez le nom d'un film">
+        <input class="h-full" placeholder="Entrez le nom d'un film" v-model="querySearch" >
         <img class="w-8" src="./assets/icons/loupe.svg"> 
       </div> 
       <div class="border-l border-b w-1/3 flex justify-center items-center  " >
@@ -18,7 +18,9 @@
      </RouterLink>
       </div>
     </div>
-    <router-view v-  />
+
+    <router-view v-if="querySearch == '' " />
+       <Search v-if="querySearch != ''" />
     <div class="bg-red  w-screen fixed bottom-0 flex justify-around h-16 items-center"  v-if="mobile" >
       <div>
          <RouterLink  :to="{
@@ -43,10 +45,15 @@
          </RouterLink>
       </div>
     </div>
+ 
   </div>
 </template>
 <script>
+import Search from "./components/searchMovie";
 export default {
+  components:{
+    Search
+  },
   data(){
     return{
       mobile:false,

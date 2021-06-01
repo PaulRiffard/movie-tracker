@@ -1,5 +1,5 @@
 <template>
-<div class="containerStat flex m-6  "  >
+<div class="containerStat flex w-4/6"    >
      <div class="flex flex-col " >
      <div class=" p-2 flex bg-title m-3 items-center justify-evenly  " >
          <img class="p-2 bg-white bg-opacity-25 rounded" src="../assets/icons/popcorn.svg">

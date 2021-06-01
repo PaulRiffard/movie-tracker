@@ -69,9 +69,5 @@ export default {
 </script>
 
 <style scoped>
-.graph{
-    width: 35%;
-}
-
 
 </style>

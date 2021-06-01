@@ -9,7 +9,7 @@
 
       <div class="text-white" >
          
-      <div >{{person.biography}}</div>
+      <div class=" mt-6 bg-red max-w-3xl" >{{person.biography}}</div>
       </div>
     </div>
  </div>

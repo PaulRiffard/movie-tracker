@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="text" placeholder="Entrer le nom d'un film ..." class="border-b" v-model="inputValue" v-on:keyup="searchMovie()" />
+    <input v-if="mobile" type="text" placeholder="Entrer le nom d'un film ..." class="border-b" v-model="inputValue" v-on:keyup="searchMovie()" />
     <div class="flex flex-wrap justify-around">
      <RouterLink  class="flex flex-col items-center m-2 max-w-sm " v-for="movie in movies" :key='movie._id'  :to="{
          name:'movieInformation',
@@ -39,11 +39,17 @@ export default {
       popularity:"",
       movies: [],
       baseImage: "http://image.tmdb.org/t/p/w200",
+      mobile: false,
 
     };
   },
 
   components:{
+  },
+  created(){
+      if(window.screen.width <= 600){
+      this.mobile = true
+    }
   },
 
   methods: {
