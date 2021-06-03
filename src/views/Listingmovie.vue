@@ -3,7 +3,13 @@
     <div class="flex justify-center items-center h-96" v-if="loading" >
         <img  class="loading"   src="../assets/loading/loading.gif"/>
     </div>
-    <div v-if="!loading">
+   <div v-if="!loading">
+        <!--  <div> trier par:
+        <div :class="this.sort === 'date' ? 'toggleOn' : 'toggleOff'" v-on:click="toggleSort('date')"  >Date</div>
+        <div :class="this.sort === 'rate' ? 'toggleOn' : 'toggleOff'" v-on:click="toggleSort('rate')"  >Note</div>
+
+
+        </div>  -->
     <div class="movieWrap" >
     <div class="movie" v-for="movie in user.seen" :key="movie.movie.id" >
             <RouterLink  :to="{
@@ -41,8 +47,7 @@ export default {
     data(){
         return{
             user:{},
-            loading: true
-
+            loading: true,
         }
     },
 created(){
@@ -50,6 +55,17 @@ created(){
         this.user = res 
         this.loading=false
     })
+},
+
+methods:{
+
+ /*    toggleSort(sort){
+        this.sort = sort
+        this.user.seen.sort((a, b) => (a.sort > b.sort) ? -1 : 1)
+
+    } */
+
+
 }
 
 }
@@ -73,6 +89,14 @@ created(){
 
 .loading{
 width: 15%;
+}
+
+.toggleOn{
+
+}
+
+.toggleOff{
+
 }
 
 </style>

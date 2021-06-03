@@ -5,6 +5,7 @@ import './assets/styles/index.css'
 import './index.css'
 import './registerServiceWorker'
 
+Vue.prototype.$eventBus = new Vue()
 
 Vue.config.productionTip = false
 

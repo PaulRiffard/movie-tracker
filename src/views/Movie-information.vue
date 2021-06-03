@@ -1,96 +1,100 @@
 <template>
 <div>
-     <button v-if="mobile && !buttonMovieSeen " v-on:click="movieSeen()" class="bg-red rounded-full w-20 h-20 fixed bottom-20 right-4 flex justify-center items-center" >       
+    <button v-if="mobile && !buttonMovieSeen " v-on:click="movieSeen()" class="bg-red rounded-full w-20 h-20 fixed bottom-20 right-4 flex justify-center items-center" >       
         <img  class="w-16" src="../assets/icons/oeil.svg"/>
-     </button>
-         <button v-if="mobile && buttonMovieSeen " v-on:click="unMovieSeen()" class="bg-red rounded-full w-20 h-20 fixed bottom-20 right-4 flex justify-center items-center" >       
-             X
-     </button>
+    </button>
+    <button 
+        v-if="mobile && buttonMovieSeen"
+        v-on:click="unMovieSeen()" 
+        class="bg-red rounded-full w-20 h-20 fixed bottom-20 right-4 flex justify-center items-center"
+    >       
+        X
+    </button>
     <div class="flex justify-center items-center h-96"  v-if="loading">
         <img  class="loading"   src="../assets/loading/loading.gif"/>
-        
     </div>
 
-  <div v-if="!loading">
-  <div v-if="user" >
-<Modal 
-:filmId="movie._id" v-if="toggleModal" 
-v-on:cancelModal="cancelModal()"
-/>
-<!--  <button v-on:click="resetSeen()" > Reset Seen vue </button> -->
-   </div>
-<div class="title" >
-    <div class="  m-8 w-screen flex justify-evenly" >
-     <img :src="movie.poster_path"/>
-     <div class="text-title" >
-      <div class="font-bold text-xl " >{{movie.title}}</div>
-     <div> {{movie.tagline}}</div>
-      <div> {{movie.release_date  | moment  }}</div>
+    <div v-if="!loading">
+        <div v-if="user" >
+            <Modal
+                v-if="toggleModal"
+                :filmId="movie._id"
+                v-on:cancelModal="cancelModal()"
+            />
+        <!--  <button v-on:click="resetSeen()" > Reset Seen vue </button> -->
+        </div>
 
-      <div class="text-white" >
-         
-      <div >{{movie.overview}}</div>
-      </div>
-    </div>
-    </div>   
+        <div class="title">
+            <div class=" m-8 flex items-start justify-evenly">
+                YESSSSSS
+                <img :src="movie.poster_path">
+                <div class="text-title">
+                    <div class="font-bold text-xl " >{{movie.title}}</div>
+                    <div> {{movie.tagline}}</div>
+                    <div> {{movie.release_date  | moment  }}</div>
+                    <div class="text-white m-6" >{{movie.overview}}</div>
+            </div>
+        </div>   
       
-
-
-       <div class="flex justify-evenly w-screen "   >
+       <div class="flex justify-evenly w-screen "  >
            <div v-if="buttonMovieSeen"  class="flex flex-wrap" >
-        <div   v-for="s in 5" :key="s" >
-        
-        <svg v-on:click="rateMovie(s)" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" :fill="s <= user.seen[movieIndex].rate ? 'white': 'black' " stroke="currentColor" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"
- class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <div
+                    v-for="s in 5" 
+                    :key="s"
+                >
+                    <svg 
+                    v-on:click="rateMovie(s)" 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="60" 
+                    height="60" 
+                    viewBox="0 0 24 24" 
+                    :fill="s <= user.seen[movieIndex].rate ? 'white': 'black' "
+                    stroke="currentColor" 
+                    stroke-width="0.5"
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                    class="feather feather-star"
+                    >
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div v-if="user" >
+                <button class="btn"  v-if="!buttonMovieSeen" v-on:click="movieSeen()" > j'ai vus ce film</button>
+                <button  class="btn"  v-else v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
+            </div>
         </div>
-         </div>
-          <div v-if="user" >
-                     <button class="btn"  v-if="!buttonMovieSeen" v-on:click="movieSeen()" > j'ai vus ce film</button>
-<button  class="btn"  v-else v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
+    </div>
+     
+    <div class="castRow">
+        <div class="cast" v-for="(director, i) in directors" :key="i" >  
+            <RouterLink  :to="{
+                name:'personInformation',
+                params:{
+                    id: director.id
+                }
+                }">  
+                {{director.name}}
+                <img :src="director.profile_path"/> {{director.job}} 
+            </RouterLink> 
+            </div> 
+
+            <div class="cast" v-for="i in 4 " :key="i" >
+                <RouterLink  :to="{
+                    name:'personInformation',
+                    params:{
+                        id: cast[i-1].id,
+                    }
+                    }">  
+                    {{cast[i-1].name}} 
+                    <img :src="cast[i-1].profile_path"/> 
+                    {{cast[i-1].character}} 
+                </RouterLink>
+            </div>
         </div>
+    </div>
 </div>
- 
-
- </div>
-     
-
-  <div class="castRow">    
-
-<div class="cast" v-for="(director, i) in directors" :key="i" >  
-     
-     <RouterLink  :to="{
-         name:'personInformation',
-         params:{
-            id: director.id
-         }
-        }">  
-     {{director.name}}
-      <img :src="director.profile_path"/> {{director.job}} 
-      </RouterLink> 
-     
-     </div> 
- <div class="cast" v-for="i in 4 " :key="i" >
-       <RouterLink  :to="{
-         name:'personInformation',
-         params:{
-            id: cast[i-1].id,
-         }
-        }">  
-         {{cast[i-1].name}} 
-         <img :src="cast[i-1].profile_path"/> 
-         {{cast[i-1].character}} 
-       </RouterLink>
-</div> 
-
-</div>
-    
-</div>
-   
-
-
-
-</div>
-
 </template>
 
 <script>

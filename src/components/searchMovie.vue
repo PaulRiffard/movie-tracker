@@ -2,7 +2,26 @@
   <div>
     <input v-if="mobile" type="text" placeholder="Entrer le nom d'un film ..." class="border-b" v-model="inputValue" v-on:keyup="searchMovie()" />
     <div class="flex flex-wrap justify-around">
-     <RouterLink  class="flex flex-col items-center m-2 max-w-sm " v-for="movie in movies" :key='movie._id'  :to="{
+     <RouterLink  class="flex flex-col items-center m-2 max-w-sm " v-for="movie in moviesDeskstop" :key='movie._id'  :to="{
+         name:'movieInformation',
+         params:{
+            id: movie.id
+         }
+        }"   >
+        <div v-on:click="filmChoose()" >
+        <div>
+      {{movie.title}} 
+        </div>
+       <img class="w-64 h-96 " :src="movie.poster_path" />
+       <div>
+       {{movie.vote_average}}
+       </div>
+        </div>
+     </RouterLink>
+    </div>
+
+  <div class="flex flex-wrap justify-around">
+     <RouterLink  class="flex flex-col items-center m-2 max-w-sm" v-for="movie in movies" :key='movie._id'  :to="{
          name:'movieInformation',
          params:{
             id: movie.id
@@ -12,11 +31,9 @@
       {{movie.title}} 
         </div>
        <img class="w-64 h-96 " :src="movie.poster_path" />
-       <div>
-       {{movie.vote_average}}
-       </div>
      </RouterLink>
     </div>
+
   </div>
 </template>
 <script>
@@ -30,7 +47,7 @@ export default {
     return moment(date).locale('fr').format('DD MMMM YYYY');
   }
     },
-
+  props:['moviesDeskstop'],
   data() {
     return {
       data: null,
@@ -54,10 +71,7 @@ export default {
 
   methods: {
     searchMovie() {
-
       if(this.inputValue != ''){
-
-      
       fetch(
         "https://api.themoviedb.org/3/search/movie?api_key=57d264ad6b69204de8c87c1935fdf93b&query=" +
           this.inputValue +"&language=fr&region=fr"
@@ -84,6 +98,10 @@ export default {
        
       }
     },
+    filmChoose(){
+      console.log("Log de ouf")
+      this.$emit('filmChoose')
+    }
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <div>
     <form @submit.prevent="onSubmit">
 
-<div v-if="!isLogin">
+<div  class="flex flex-col items-center" v-if="!isLogin">
 
       <input
         v-model="email"
@@ -19,8 +19,8 @@
         placeholder="Mot de passe"
         required
       />
-      <button  class="secondary_btn" type="submit">Login</button>
-          <router-link to="/register">Créer un nouveau compte </router-link>
+      <button  class="secondary_btn " type="submit">Login</button>
+          <router-link to="/register">Créer un compte </router-link>
           <div v-if="error"> Mot de passe Incorrect</div>
 </div>
     </form>
@@ -79,6 +79,7 @@ if (localStorage.getItem("currentUser") != null) {
                  this.user  = this.decode.user
                   this.isLogin = true
                   this.$emit('logIn',this.user)
+                  this.$eventBus.$emit('logIn',this.user)
                   },
                     error => {
                         this.error = error;
@@ -93,6 +94,7 @@ if (localStorage.getItem("currentUser") != null) {
       this.isLogin = false
       this.user = {}
       this.$emit('logOut')
+      this.$eventBus.$emit('logOut',this.user)
     }
 
     }

@@ -53,7 +53,7 @@ export default {
       const data = await res.json();
       this.upComingMovies = data.results;
       this.upComingMovies.sort((a, b) => (a.popularity < b.popularity) ? -1 : 1)
-       this.upComingMovies = this.upComingMovies.splice(14 )
+       this.upComingMovies = this.upComingMovies.splice(14)
       this.upComingMovies.sort((a,b) => (a.release_date > b.release_date) ?-1 :1  )
       this.upComingMovies.map(movie =>{ if(movie.poster_path == null){
         movie.poster_path = "https://i.ibb.co/whjm12r/Group-35.png"

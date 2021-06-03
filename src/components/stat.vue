@@ -1,16 +1,16 @@
 <template>
-<div class="containerStat flex w-4/6"    >
-     <div class="flex flex-col " >
+<div class="containerStat flex w-4/6 justify-evenly "    >
+     <div class="flex flex-wrap justify-center " >
      <div class=" p-2 flex bg-title m-3 items-center justify-evenly  " >
          <img class="p-2 bg-white bg-opacity-25 rounded" src="../assets/icons/popcorn.svg">
-         <div class="flex flex-col items-start" >
+         <div v-if="!mobile" class="flex flex-col items-start" >
         <div class="font-bold"> {{movieThisMonth.length}}</div>
          <div> film vus en {{actualDate | moment }} </div>
          </div>
      </div>
      <div class="runTimeTotal flex m-3 p-2 items-center justify-evenly " >
            <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/hour.svg">
-           <div class="flex flex-col items-start">
+           <div v-if="!mobile" class="flex flex-col items-start">
            <div class="font-bold">
          {{runTimeTotalHours}}
            </div>
@@ -19,22 +19,19 @@
            </div>
            </div>
  </div> 
- </div>   
+ <div class="bg-purple flex m-3 p-2 items-center justify-evenly " >
+           <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/hour.svg">
+           <div v-if="!mobile" class="flex flex-col items-start">
+           <div class="font-bold">
+         {{rateAverage.toFixed(2)  }}
+           </div>
+           <div>
+               Note Moyenne
+           </div>
+           </div>
+ </div> 
 
-<div class="m-3 bg-purple flex flex-wrap "  >
- 3 dernier films
-<div class="m-2 flex justify-center flex-col" v-for="movie in threeLast" :key="movie.movie_id"  >
-       <RouterLink  :to="{
-         name:'movieInformation',
-         params:{
-            id: movie.movie.mdb
-         }
-       }"
-         >
-    {{movie.movie.title}}
-       </RouterLink>
-</div>
- </div>
+ </div>   
 </div>
 </template>
 
@@ -64,10 +61,14 @@ export default {
             movieThisMonth:[],
             actualDate : new Date,
             actualMonth:"",
+            mobile: false,
         
         }
     },
     created(){
+          if(window.screen.width <= 600){
+      this.mobile = true
+    }
         authenticationService.getUser().then(res =>{
             this.user = res
              this.nbMovie = this.user.seen.length
@@ -77,7 +78,7 @@ export default {
              this.getThreeLastMovie()
              this.getDateVue()
              this.calculateRateAverage()
-             this.getThreeMostRated()
+             this.getMostRated()
              this.getMovieByMonth()
 
         })
@@ -110,7 +111,7 @@ export default {
                 })
                 this.rateAverage = this.totalRate/rateArray.length
         },
-        getThreeMostRated(){
+        getMostRated(){
             let movieMostratedArray = this.user.seen.filter(x => x.rate != undefined )
             movieMostratedArray.sort((a, b) => (a.rate > b.rate) ? -1 : 1)
             },
@@ -118,11 +119,7 @@ export default {
              this.user.seen.map(x =>{
           x.date = new Date(x.date)
       })
-      console.log(this.actualMonth)
     this.movieThisMonth = this.user.seen.filter(x => x.date.getMonth() == this.actualMonth  )
-    console.log(this.movieThisMonth)
-
-    
         }    
     }
 }

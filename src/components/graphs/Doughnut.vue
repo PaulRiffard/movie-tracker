@@ -37,6 +37,9 @@ export default {
     fillData() {
       this.chartData = {
         labels: this.chartLabel,
+        legend:{
+          display:false
+        },
         datasets: [
           {
             borderColor: this.colorChart,

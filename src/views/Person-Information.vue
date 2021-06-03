@@ -1,23 +1,21 @@
 <template>
   <div>
     <div>
-    <div class="  m-8 w-screen flex justify-evenly" >
+    <div class="  m-8 flex justify-evenly" >
      <img :src="person.profile_path"/>
      <div class="text-title" >
       <div class="font-bold text-xl " >{{person.name}}</div>
-      <div> {{person.birthday}}</div>
+      <div> {{person.birthday | moment }}</div>
 
-      <div class="text-white" >
-         
-      <div class=" mt-6 bg-red max-w-3xl" >{{person.biography}}</div>
-      </div>
+      
+      <div class=" mt-6 max-w-3xl text-white " >{{person.biography}}</div>
     </div>
  </div>
      
 
     </div>
 
-
+<div class="flex flex-wrap justify-around" >
  <div  v-for="actor in personCast.cast" :key="actor.id">
  <RouterLink  :to="{
          name:'movieInformation',
@@ -25,15 +23,28 @@
             id: actor.id
          }
         }"> 
-
- {{actor.character}} / {{actor.title}} 
+<div class="flex flex-col items-center" >
+  <div class="text-title" >
+  <div>{{actor.title}}</div>
+  <div> {{actor.release_date | moment }} </div>
+  </div>
+  <img :src="actor.poster_path">
+  <div> {{actor.character}}</div>
+</div>
  </RouterLink>
  </div>
  </div>
+  </div>
 </template>
 
 <script>
+import moment from 'moment'
 export default {
+  filters: {
+  moment: function (date) {
+    return moment(date).locale('fr').format('DD MMMM YYYY');
+  }
+  },
 
   data(){
     return{
@@ -50,7 +61,6 @@ export default {
          fetch("https://api.themoviedb.org/3/person/"+this.id +"?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr").then(response => response.json())
          .then(res =>{
            this.person = res
-           console.log(this.person,"De Ouf")
            if(this.person.profile_path == null){
              this.person.profile_path  = "https://i.ibb.co/whjm12r/Group-35.png"
            }else{
@@ -65,7 +75,20 @@ export default {
    fetch("https://api.themoviedb.org/3/person/"+this.id +"/movie_credits?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr").then(response => response.json())
       .then(response =>{
         this.personCast = response
-        this.personCast.cast.sort((a, b) => (a.release_date > b.release_date) ? -1 : 1)
+        this.personCast.cast.sort((a, b) => (a.popularity > b.popularity) ? -1 : 1)
+       this.personCast.cast = this.personCast.cast.slice(0,5)
+       console.log(this.personCast.cast)
+       this.personCast.cast.sort((a, b) => (a.release_date > b.release_date) ? -1 : 1)
+       this.personCast.cast.map(x => {
+         if(x.poster_path == null ){
+              x.poster_path = "https://i.ibb.co/whjm12r/Group-35.png"
+           }else{
+             x.poster_path = "http://image.tmdb.org/t/p/w200"+x.poster_path
+         }
+         console.log(x.poster_path)
+
+       })
+
       })
 }
 

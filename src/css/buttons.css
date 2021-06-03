@@ -11,6 +11,6 @@
     @apply text-purple;
     @apply border-purple;
     @apply border;
-    @apply w-60;
-    @apply h-10;
+    @apply py-2;
+    @apply px-3;
 }
