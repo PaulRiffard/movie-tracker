@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="flex items-center flex-wrap  m-8" v-if="user" >
+    <div class="flex items-center flex-wrap justify-around  m-8" v-if="user" >
     <div class="flex flex-col items-center w-2/6 " >
       <div class="text-title font-bold" >
       BONJOUR {{user.username.toUpperCase()}},

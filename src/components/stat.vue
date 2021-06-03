@@ -1,6 +1,6 @@
 <template>
-<div class="containerStat flex w-4/6 justify-evenly "    >
-     <div class="flex flex-wrap justify-center " >
+<div class="containerStat flex justify-evenly "    >
+     <div class="containerIcons flex flex-wrap justify-center " >
      <div class=" p-2 flex bg-title m-3 items-center justify-evenly  " >
          <img class="p-2 bg-white bg-opacity-25 rounded" src="../assets/icons/popcorn.svg">
          <div v-if="!mobile" class="flex flex-col items-start" >
@@ -20,7 +20,7 @@
            </div>
  </div> 
  <div class="bg-purple flex m-3 p-2 items-center justify-evenly " >
-           <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/hour.svg">
+           <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/rate.svg">
            <div v-if="!mobile" class="flex flex-col items-start">
            <div class="font-bold">
          {{rateAverage.toFixed(2)  }}
@@ -137,6 +137,18 @@ export default {
 
 .containerStat{
     background-color: #494A4B;
+     width:66%
+}
+
+@media (max-width: 600px) {
+  .containerIcons{
+    
+      flex-direction: column;
+    
+  }
+  .containerStat{
+      width:33%
+  }
 }
 
 </style>
