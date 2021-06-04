@@ -20,8 +20,8 @@ cinématographiques.
     <Stat/>
     </div>
      <div class="flex flex-wrap justify-around m-5 ">
-  <LineChart class="w-1/2" v-if="showGraph" />
-  <Doughnut class="w-1/2" v-if="showGraph" />
+  <LineChart class="w-1/4" v-if="showGraph" />
+  <Doughnut class="w-1/4" v-if="showGraph" />
   </div>
     <Login v-if="mobile" v-on:logOut="logOut()" v-on:logIn="logIn($event)" />
     <Search v-on:activeUpcoming="activeUpcoming($event)" />

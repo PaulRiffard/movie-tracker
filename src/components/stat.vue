@@ -7,7 +7,7 @@
         <div class="font-bold"> {{movieThisMonth.length}}</div>
          <div> film vus en {{actualDate | moment }} </div>
          </div>
-            <div v-if="stat == 'number'" class="flex flex-col items-start absolute bg-title p-4 w-28"  v-on:click="showStat('')"  >
+            <div v-if="stat == 'number' && mobile " class="flex flex-col items-start absolute bg-title p-4 w-28"  v-on:click="showStat('')"  >
         <div class="font-bold"> {{movieThisMonth.length}}</div>
          <div> film vus en {{actualDate | moment }} </div>
          </div>
@@ -24,7 +24,7 @@
            </div>
            
            </div>
-           <div v-if="stat == 'time'" class="flex flex-col items-start absolute runTimeTotal p-4  w-28"  v-on:click="showStat('')"  >
+           <div v-if="stat   == 'time' && mobile " class="flex flex-col items-start absolute runTimeTotal p-4  w-28"  v-on:click="showStat('')"  >
         <div class="font-bold">  {{runTimeTotalHours}}/5</div>
          <div> Heures vu </div>
          </div>
@@ -40,7 +40,7 @@
            </div>
            
            </div>
-           <div v-if="stat == 'rate'" class="flex flex-col items-start absolute bg-purple p-4 w-28"  v-on:click="showStat('')"  >
+           <div v-if="stat == 'rate' && mobile " class="flex flex-col items-start absolute bg-purple p-4 w-28"  v-on:click="showStat('')"  >
         <div class="font-bold">   {{rateAverage.toFixed(2)   }} /5</div>
          <div>  Note Moyenne  </div>
          </div>

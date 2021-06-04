@@ -139,6 +139,7 @@ loading: true,
 }
     },
     created(){
+        this.movie=[]
          if(window.screen.width <= 600){
       this.mobile = true
     }
@@ -162,9 +163,7 @@ loading: true,
          this.movie.poster_path = "https://i.ibb.co/whjm12r/Group-35.png"
      }else{
         this.movie.poster_path = this.baseImage + this.movie.poster_path
-     }
-     console.log(this.movie)
-    
+     }    
        this.movieInDatabade(this.movie.id)
          },
 
@@ -263,7 +262,7 @@ loading: true,
                 }
                 }  
                  this.loading = false
-                }, 300);
+                }, 800);
              },
 
             
