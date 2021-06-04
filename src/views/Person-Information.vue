@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-    <div class="  m-8 flex justify-evenly" >
-     <img :src="person.profile_path"/>
+    <div class="  m-8 flex justify-evenly items-start " >
+     <img class="border " :src="person.profile_path"/>
      <div class="text-title" >
       <div class="font-bold text-xl " >{{person.name}}</div>
       <div> {{person.birthday | moment }}</div>

@@ -2,33 +2,48 @@
 <div class="containerStat flex justify-evenly "    >
      <div class="containerIcons flex flex-wrap justify-center " >
      <div class=" p-2 flex bg-title m-3 items-center justify-evenly  " >
-         <img class="p-2 bg-white bg-opacity-25 rounded" src="../assets/icons/popcorn.svg">
+         <img class="p-2 bg-white bg-opacity-25 rounded" src="../assets/icons/popcorn.svg" v-on:click="showStat('number')" >
          <div v-if="!mobile" class="flex flex-col items-start" >
         <div class="font-bold"> {{movieThisMonth.length}}</div>
          <div> film vus en {{actualDate | moment }} </div>
          </div>
+            <div v-if="stat == 'number'" class="flex flex-col items-start absolute bg-title p-4 w-28"  v-on:click="showStat('')"  >
+        <div class="font-bold"> {{movieThisMonth.length}}</div>
+         <div> film vus en {{actualDate | moment }} </div>
+         </div>
      </div>
-     <div class="runTimeTotal flex m-3 p-2 items-center justify-evenly " >
-           <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/hour.svg">
+
+ <div class="runTimeTotal flex m-3 p-2 items-center justify-evenly " >
+           <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/hour.svg" v-on:click="showStat('time')" >
            <div v-if="!mobile" class="flex flex-col items-start">
            <div class="font-bold">
          {{runTimeTotalHours}}
            </div>
            <div>
-         Heures passés au cinéma 
+            Heures passés au cinéma 
            </div>
+           
            </div>
+           <div v-if="stat == 'time'" class="flex flex-col items-start absolute runTimeTotal p-4  w-28"  v-on:click="showStat('')"  >
+        <div class="font-bold">  {{runTimeTotalHours}}/5</div>
+         <div> Heures vu </div>
+         </div>
  </div> 
  <div class="bg-purple flex m-3 p-2 items-center justify-evenly " >
-           <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/rate.svg">
+           <img class="p-2 bg-white bg-opacity-25 rounded " src="../assets/icons/rate.svg" v-on:click="showStat('rate')" >
            <div v-if="!mobile" class="flex flex-col items-start">
            <div class="font-bold">
-         {{rateAverage.toFixed(2)  }}
+         {{rateAverage.toFixed(2)   }} /5
            </div>
            <div>
                Note Moyenne
            </div>
+           
            </div>
+           <div v-if="stat == 'rate'" class="flex flex-col items-start absolute bg-purple p-4 w-28"  v-on:click="showStat('')"  >
+        <div class="font-bold">   {{rateAverage.toFixed(2)   }} /5</div>
+         <div>  Note Moyenne  </div>
+         </div>
  </div> 
 
  </div>   
@@ -62,7 +77,7 @@ export default {
             actualDate : new Date,
             actualMonth:"",
             mobile: false,
-        
+            stat: ""
         }
     },
     created(){
@@ -120,8 +135,17 @@ export default {
           x.date = new Date(x.date)
       })
     this.movieThisMonth = this.user.seen.filter(x => x.date.getMonth() == this.actualMonth  )
-        }    
+        },
+        showStat(stat){
+        this.stat = stat
+           
+    console.log(this.stat)
+
+    }  
     }
+
+    
+
 }
 </script>
 

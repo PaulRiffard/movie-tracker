@@ -21,7 +21,7 @@
                 :filmId="movie._id"
                 v-on:cancelModal="cancelModal()"
             />
-        <!--  <button v-on:click="resetSeen()" > Reset Seen vue </button> -->
+  <!--     <button v-on:click="resetSeen()" > Reset Seen vue </button> -->
         </div>
 
         <div class="title">
@@ -60,13 +60,13 @@
             </div>
 
             <div v-if="user" >
-                <button class="btn"  v-if="!buttonMovieSeen" v-on:click="movieSeen()" > j'ai vus ce film</button>
-                <button  class="btn"  v-else v-on:click="unSeenMovie()" > Je n'ai pas vus ce film</button>
+                <button class="btn"  v-if="!buttonMovieSeen" v-on:click="movieSeen()" > j'ai vu ce film</button>
+                <button  class="btn"  v-else v-on:click="unSeenMovie()" > Je n'ai pas vu ce film</button>
             </div>
         </div>
     </div>
      
-    <div class="castRow">
+    <div class="castRow  ">
         <div class="cast" v-for="(director, i) in directors" :key="i" >  
             <RouterLink  :to="{
                 name:'personInformation',
@@ -163,6 +163,7 @@ loading: true,
      }else{
         this.movie.poster_path = this.baseImage + this.movie.poster_path
      }
+     console.log(this.movie)
     
        this.movieInDatabade(this.movie.id)
          },
