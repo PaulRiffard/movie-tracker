@@ -26,7 +26,6 @@
 
         <div class="title">
             <div class=" m-8 flex items-start justify-evenly">
-                YESSSSSS
                 <img :src="movie.poster_path">
                 <div class="text-title">
                     <div class="font-bold text-xl " >{{movie.title}}</div>
