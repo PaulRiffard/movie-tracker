@@ -58,7 +58,7 @@ export default {
 
   methods:{
     getPersonDetail(){
-         fetch("https://api.themoviedb.org/3/person/"+this.id +"?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr").then(response => response.json())
+         fetch("https://api.themoviedb.org/3/person/"+this.id +"?api_key="+process.env.VUE_APP_API+"&language=fr").then(response => response.json())
          .then(res =>{
            this.person = res
            if(this.person.profile_path == null){
@@ -72,7 +72,7 @@ export default {
     },
 
     getPersonInformation(){
-   fetch("https://api.themoviedb.org/3/person/"+this.id +"/movie_credits?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr").then(response => response.json())
+   fetch("https://api.themoviedb.org/3/person/"+this.id +"/movie_credits?api_key="+process.env.VUE_APP_API+"&language=fr").then(response => response.json())
       .then(response =>{
         this.personCast = response
         this.personCast.cast.sort((a, b) => (a.popularity > b.popularity) ? -1 : 1)

@@ -56,6 +56,9 @@ export default {
       mobile:false,
     }
   },
+  mounted(){
+    console.log(process.env.VUE_APP_API)
+  },
   created(){
       if(window.screen.width <= 600){
       this.mobile = true

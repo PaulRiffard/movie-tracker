@@ -47,7 +47,7 @@ export default {
   methods: {
     async getName() {
       const res = await fetch(
-"https://api.themoviedb.org/3/movie/popular?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr&region=fr"
+"https://api.themoviedb.org/3/movie/popular?api_key="+process.env.VUE_APP_API+"&language=fr&region=fr"
  
 );
       const data = await res.json();

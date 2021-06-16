@@ -168,8 +168,9 @@ loading: true,
          },
 
    getMovieCastById(){
-       fetch("https://api.themoviedb.org/3/movie/"+this.id +"/credits?api_key=57d264ad6b69204de8c87c1935fdf93b").then(response => response.json())
+       fetch("https://api.themoviedb.org/3/movie/"+this.id +"/credits?api_key="+process.env.VUE_APP_API).then(response => response.json())
       .then(response =>{
+          console.log(response)
         
       this.cast = response.cast
       this.cast.forEach(element => {
