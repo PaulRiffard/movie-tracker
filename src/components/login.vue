@@ -74,7 +74,6 @@ if (localStorage.getItem("currentUser") != null) {
             authenticationService.login(this.email , this.password)
                 .then(
                   user => {
-                    console.log("TEST DE OUF ")
                   this.decode = VueJwtDecode.decode(user.token)
                  this.user  = this.decode.user
                   this.isLogin = true

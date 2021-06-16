@@ -115,7 +115,7 @@ export default {
 
     data(){
         return {
-id: this.$route.params.id,
+id: '',
 user :null,
 mobile: false,
 movie :{},
@@ -155,8 +155,10 @@ loading: true,
 
     methods:{
     async getMovieById(){
+        this.id=''
+        this.id= this.$route.params.id
       const res = await fetch(
-       "https://api.themoviedb.org/3/movie/"+this.id+"?api_key=57d264ad6b69204de8c87c1935fdf93b&language=fr"
+       "https://api.themoviedb.org/3/movie/"+this.id+"?api_key="+process.env.VUE_APP_API+"&language=fr"
       );
       this.movie = await res.json();
      if(this.movie.poster_path == null ){

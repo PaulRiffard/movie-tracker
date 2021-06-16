@@ -58,6 +58,7 @@
 import Search from "./components/searchMovie";
 import Login from "./components/login";
 import {authenticationService} from "./service/loginService"
+import {mapActions, mapState} from 'vuex'
 
 export default {
   components:{
@@ -73,7 +74,14 @@ export default {
       baseImage: "http://image.tmdb.org/t/p/w200",
     }
   },
+  computed:{
+    ...mapState('user',{
+      stateUser: state => state.user
+  
+    })
+  },
   created(){
+    this.authenticate()
     if(window.screen.width <= 600){
       this.mobile = true
     }
@@ -82,6 +90,9 @@ export default {
     })
   },
   methods:{
+    ...mapActions('user',[
+      'authenticate'
+    ]),
     searchMovie() {
       if(this.inputValue != ''){
       fetch(

@@ -57,7 +57,7 @@ export default {
     }
   },
   mounted(){
-    console.log(process.env.VUE_APP_API)
+
   },
   created(){
       if(window.screen.width <= 600){
